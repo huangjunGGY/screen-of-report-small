@@ -4,7 +4,7 @@ const routes = [
   {
     path: '/',
     name: 'index',
-    component: () => import('@/views/index.vue'),
+    component: () => import('@/pages/index.vue'),
     meta: {
       title: '数字公务员'
     }
@@ -12,7 +12,7 @@ const routes = [
   {
     path: '/search',
     name: 'search',
-    component: () => import('@/views/search.vue'),
+    component: () => import('@/pages/search.vue'),
     meta: {
       title: '搜索新闻'
     }
@@ -20,7 +20,7 @@ const routes = [
   {
     path: '/detail',
     name: 'detail',
-    component: () => import('@/views/detail.vue'),
+    component: () => import('@/pages/detail.vue'),
     meta: {
       title: '新闻详情'
     }
@@ -28,7 +28,7 @@ const routes = [
   {
     path: '/read-list',
     name: 'read-list',
-    component: () => import('@/views/read-list.vue'),
+    component: () => import('@/pages/read-list.vue'),
     meta: {
       title: '今日阅读列表'
     }
@@ -36,7 +36,7 @@ const routes = [
   {
     path: '/:pathMatch(.*)*',
     name: 'not-found',
-    component: () => import('@/views/not-found.vue'),
+    component: () => import('@/pages/not-found.vue'),
     meta: {
       title: '404'
     }

@@ -124,6 +124,8 @@ function localMockPlugin() {
 }
 
 export default defineConfig({
+  // 配置相对路径，完美适配 GitHub Pages 二级子路径部署与本地离线打开
+  base: './',
   plugins: [
     imageImportResolverPlugin(),
     vue({
@@ -146,7 +148,9 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, 'src')
+      '@': path.resolve(__dirname, 'src'),
+      '@/pages': path.resolve(__dirname, 'src/pages'),
+      '@/views': path.resolve(__dirname, 'src/pages') // 双向兼容历史 views 别名引用
     }
   },
   css: {
