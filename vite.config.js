@@ -10,6 +10,19 @@ import mockNational from './src/mock/type/paper_national.js';
 import mockMunicipal from './src/mock/type/paper_municipal.js';
 import mockArticlePage from './src/mock/article/page.js';
 
+// 解析在 JS 中通过 import ... from '/image/...' 引用的图片，将其无缝重定向到 src/assets/image
+function imageImportResolverPlugin() {
+  return {
+    name: 'vite-plugin-image-import-resolver',
+    enforce: 'pre',
+    resolveId(source, importer) {
+      if (source.startsWith('/image/')) {
+        return path.resolve(__dirname, 'src/assets', source.slice(1));
+      }
+    }
+  };
+}
+
 // 本地开发 Mock 服务插件（确保离线/无独立后端时功能满血运转）
 function localMockPlugin() {
   return {
@@ -21,7 +34,6 @@ function localMockPlugin() {
 
         // 占位图片处理（如 search.vue / 报刊预览中的 filePath 动态请求）
         if (pathname.includes('/fileInfoLocation') || pathname.includes('/newspaperInfo/')) {
-          // 返回 1x1 透明 PNG 避免图片加载红标报错
           const transparentPng = Buffer.from(
             'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=',
             'base64'
@@ -55,7 +67,6 @@ function localMockPlugin() {
 
           // 文章列表与搜索
           if (pathname === '/api/admin/article/page') {
-            // 获取请求体（如搜索参数）
             let body = '';
             req.on('data', chunk => {
               body += chunk;
@@ -114,6 +125,7 @@ function localMockPlugin() {
 
 export default defineConfig({
   plugins: [
+    imageImportResolverPlugin(),
     vue({
       template: {
         compilerOptions: {
@@ -134,8 +146,14 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, 'src'),
-      '/image': path.resolve(__dirname, 'public/image')
+      '@': path.resolve(__dirname, 'src')
+    }
+  },
+  css: {
+    preprocessorOptions: {
+      scss: {
+        api: 'modern-compiler'
+      }
     }
   },
   server: {
